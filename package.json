@@ -1,0 +1,75 @@
+{
+  "name": "vue-autoimport",
+  "displayName": "Vue.js AutoImport",
+  "description": "provide for vue.js support.",
+  "version": "0.0.1",
+  "publisher": "ishiyama",
+  "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
+  "icon": "asset/vue.png",
+  "engines": {
+    "vscode": "^1.27.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:vue"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Vue.js AutoImport",
+      "properties": {
+        "vuejsAutoImport.rootDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "root directory in workspace for file grep. ex) src"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "extension.vuejsAutoImport",
+        "title": "Import .vue"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorTextFocus",
+          "command": "extension.vuejsAutoImport",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "extension.vuejsAutoImport",
+        "key": "ctrl+.",
+        "mac": "cmd+.",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/globby": "^8.0.0",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.10.25",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21"
+  },
+  "dependencies": {
+    "@types/voca": "^1.4.0",
+    "globby": "^8.0.1",
+    "voca": "^1.4.0"
+  }
+}
