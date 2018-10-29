@@ -7,6 +7,8 @@
 
 Press "ctrl + /" or select "import .vue" in context menu on custom component tag.
 
+![demo](https://raw.githubusercontent.com/wiki/ishiyama0530/VueJsAutoImport/gif/1.gif)
+
 ## Change Log
 
 See Change Log [here](https://github.com/ishiyama0530/VueJsAutoImport/blob/master/CHANGELOG.md)
