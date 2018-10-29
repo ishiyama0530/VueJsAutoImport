@@ -13,6 +13,15 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.activeTextEditor!.document,
         vscode.window.activeTextEditor!.selection.active
       )
+
+      if (
+        !vscode.window.activeTextEditor ||
+        vscode.window.activeTextEditor.document.languageId !== 'vue'
+      ) {
+        vscode.window.showWarningMessage('Vue.js AutoImport is only vue file.')
+        return false
+      }
+
       const rootPath = vscode.workspace.rootPath
         ? path.resolve(
             vscode.workspace.rootPath,
@@ -22,11 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
           )
         : ''
 
-      const lowerText = text.toLocaleLowerCase()
       const pathList: string[] = await grepAsync([
-        path.join(rootPath, `**/${voca.camelCase(lowerText)}.vue`),
-        path.join(rootPath, `**/${voca.kebabCase(lowerText)}.vue`),
-        path.join(rootPath, `**/${voca.capitalize(lowerText)}.vue`)
+        path.join(rootPath, `**/${voca.camelCase(text)}.vue`),
+        path.join(rootPath, `**/${voca.kebabCase(text)}.vue`),
+        path.join(rootPath, `**/${voca.capitalize(text)}.vue`)
       ])
 
       const importCore = (fullPath: string) => {
@@ -38,9 +46,15 @@ export function activate(context: vscode.ExtensionContext) {
           activeEditorPath.dir,
           parsedTargetFilePath.dir
         )
-        const relativePath = path
+        let relativePath = path
           .join(relativeDir, parsedTargetFilePath.base)
           .replace(/\\/g, '/')
+
+        const parsedRelativeDir = path.dirname(relativePath)
+        if (parsedRelativeDir === '.') {
+          // if no dir
+          relativePath = './' + relativePath
+        }
 
         importVueFile(parsedTargetFilePath.name, relativePath)
       }

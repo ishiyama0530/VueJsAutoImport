@@ -2,10 +2,11 @@
   "name": "vue-autoimport",
   "displayName": "Vue.js AutoImport",
   "description": "provide for vue.js support.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "ishiyama",
   "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
   "icon": "asset/vue.png",
+  "homepage": "https://github.com/ishiyama0530/VueJsAutoImport",
   "engines": {
     "vscode": "^1.27.0"
   },
@@ -46,8 +47,8 @@
     "keybindings": [
       {
         "command": "extension.vuejsAutoImport",
-        "key": "ctrl+.",
-        "mac": "cmd+.",
+        "key": "ctrl+/",
+        "mac": "cmd+/",
         "when": "editorTextFocus"
       }
     ]
