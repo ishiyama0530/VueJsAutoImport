@@ -2,7 +2,7 @@
   "name": "vue-autoimport",
   "displayName": "Vue.js AutoImport",
   "description": "provide for vue.js support.",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "publisher": "ishiyama",
   "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
   "icon": "asset/vue.png",

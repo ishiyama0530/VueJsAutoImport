@@ -49,7 +49,7 @@ async function insertComponent(
   if (match && match.index > -1) {
     const insertIndex = match.index + match[0].length
     const insertPosition = document.positionAt(insertIndex)
-    if (match[0].trim().endsWith('{')) {
+    if (match[0].trim().endsWith('{') || match[0].trim().endsWith(',')) {
       // if no registed component (ex) components: {}
       await editor.edit(edit => {
         edit.insert(insertPosition, componentName)
