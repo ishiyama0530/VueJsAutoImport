@@ -42,21 +42,20 @@ export function activate(context: vscode.ExtensionContext) {
           vscode.window.activeTextEditor!.document.fileName
         )
         const parsedTargetFilePath = path.parse(fullPath)
-        const relativeDir = path.relative(
+        const relationalDir = path.relative(
           activeEditorPath.dir,
           parsedTargetFilePath.dir
         )
-        let relativePath = path
-          .join(relativeDir, parsedTargetFilePath.base)
+        let relationalPath = path
+          .join(relationalDir, parsedTargetFilePath.base)
           .replace(/\\/g, '/')
 
-        const parsedRelativeDir = path.dirname(relativePath)
-        if (parsedRelativeDir === '.') {
-          // if no dir
-          relativePath = './' + relativePath
+        // if just under
+        if (!relationalPath.startsWith('../')) {
+          relationalPath = './' + relationalPath
         }
 
-        importVueFile(parsedTargetFilePath.name, relativePath)
+        importVueFile(parsedTargetFilePath.name, relationalPath)
       }
 
       if (pathList.length === 1) {
@@ -76,7 +75,7 @@ function getText(
 ): string {
   const targetRange = document.getWordRangeAtPosition(
     position,
-    /<.+?-?.+?(>| )/
+    /<.+?-?.+?(>| |\n|\r\n|$)/
   )
   const targetText = document.getText(targetRange)
   const formatedText = targetText
