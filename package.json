@@ -26,6 +26,11 @@
           "type": "string",
           "default": "",
           "description": "root directory in workspace for file grep. ex) src"
+        },
+        "vuejsAutoImport.insertOneComponentPerLine": {
+          "type": "boolean",
+          "default": false,
+          "description": "When inserting imported components in components{}, insert one component per line."
         }
       }
     },
