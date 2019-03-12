@@ -44,6 +44,13 @@ async function insertComponent(
 ): Promise<void> {
   const document = editor.document
   const text = document.getText()
+  
+  const config = vscode.workspace.getConfiguration()
+  const hasNewLine = config.get<boolean>('vuejsAutoImport.insertOneComponentPerLine')
+  const indentationCount = config.get<boolean>('vuejsAutoImport.indentation')
+  
+  const newLine = getEolString(document.eol)
+  const indent = ' '.repeat(indentationCount)             // todo: allow switching between tabs and spaces
 
   const match = /components( )*:( )*{[\s\S]*?(?=})/.exec(text)
   if (match && match.index > -1) {
@@ -51,12 +58,20 @@ async function insertComponent(
     const insertPosition = document.positionAt(insertIndex)
     if (match[0].trim().endsWith('{') || match[0].trim().endsWith(',')) {
       // if no registed component (ex) components: {}
-      await editor.edit(edit => {
-        edit.insert(insertPosition, componentName)
+      await editor.edit(edit => 
+        if (hasNewLine) {
+          edit.insert(insertPosition, `${newLine}${indent}${componentName}{$newLine}`
+        } else {
+          edit.insert(insertPosition, componentName)
+        }
       })
     } else {
       await editor.edit(edit => {
-        edit.insert(insertPosition, `,  ${componentName}`)
+        if (hasNewLine) {
+          edit.insert(insertPosition, `,${newLine}${indent}${componentName}`)
+        } else {
+          edit.insert(insertPosition, `,  ${componentName}`)
+        }
       })
     }
   }
