@@ -85,7 +85,6 @@
   },
   "dependencies": {
     "@types/voca": "^1.4.0",
-    "event-stream": "^4.0.1",
     "globby": "^8.0.1",
     "voca": "^1.4.0"
   }
