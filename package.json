@@ -31,6 +31,11 @@
           "type": "boolean",
           "default": false,
           "description": "When inserting imported components in components{}, insert one component per line."
+        },
+        "vuejsAutoImport.indentCount": {
+          "type": "number",
+          "default": 4,
+          "description": "Number of indents for lines inside components object."
         }
       }
     },
