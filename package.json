@@ -35,7 +35,12 @@
         "vuejsAutoImport.indentCount": {
           "type": "number",
           "default": 4,
-          "description": "Number of indents for lines inside components object."
+          "description": "Number of spaces to indent for lines inside components object (relevant if insertOneComponentPerLine is set to true)."
+        },
+        "vuejsAutoImport.hasTrailingComma": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to add trailing comma behind the last inserted item."
         }
       }
     },
@@ -80,6 +85,7 @@
   },
   "dependencies": {
     "@types/voca": "^1.4.0",
+    "event-stream": "^4.0.1",
     "globby": "^8.0.1",
     "voca": "^1.4.0"
   }
