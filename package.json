@@ -30,17 +30,27 @@
         "vuejsAutoImport.insertOneComponentPerLine": {
           "type": "boolean",
           "default": false,
-          "description": "When inserting imported components in components{}, insert one component per line."
+          "description": "Insert one component per line."
         },
-        "vuejsAutoImport.indentCount": {
-          "type": "number",
-          "default": 4,
-          "description": "Number of spaces to indent for lines inside components object (relevant if insertOneComponentPerLine is set to true)."
+        "vuejsAutoImport.indentScriptTag": {
+          "type": "boolean",
+          "default": false,
+          "description": "Script tag is indented (check this if imports are indented by one indentation level too little)"
         },
         "vuejsAutoImport.hasTrailingComma": {
           "type": "boolean",
           "default": false,
-          "description": "Whether to add trailing comma behind the last inserted item."
+          "description": "Add trailing comma behind the last inserted item."
+        },
+        "vuejsAutoImport.importWithSemicolon": {
+          "type": "boolean",
+          "default": false,
+          "description": "Put semicolon after imports"
+        },
+        "vuejsAutoImport.forcePascalCase": {
+          "type": "boolean",
+          "default": true,
+          "description": "Force components to use PascalCase (even if file name uses kebab-case, camelCase or snake_case)"
         }
       }
     },
