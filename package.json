@@ -85,7 +85,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "format": "prettier --write ./src/**/*.ts",
-    "pre-commit": "yarn format"
+    "precommit": "npm run format"
   },
   "devDependencies": {
     "@types/globby": "^8.0.0",
