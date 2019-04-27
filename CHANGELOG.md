@@ -2,6 +2,15 @@
 
 All notable changes to the "vuejs-autoimport" extension will be documented in this file.
 
+## 1.0.2 | 2019-4-27
+
+- add semicolon after imports (default: off)
+- one component per line (default: off)
+- script tag is indented (gives one extra indent, default: off)
+- force pascal case (while you're kinda not supposed to do that according to vue convention, naming component files in kebab case would break things. default: on)
+- add trailing comma (default: off)
+- auto add `compornets{}` block.
+
 ## 1.0.1 | 2018-11-23
 
 - Fixed to accurately import path if component exist in just under directory.

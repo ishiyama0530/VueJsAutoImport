@@ -17,6 +17,10 @@ See Change Log [here](https://github.com/ishiyama0530/VueJsAutoImport/blob/maste
 
 See Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport)
 
+## Contributor
+
+- [xternal7](https://github.com/xternal7)
+
 ## License
 
 MIT © [ishiyama](https://github.com/ishiyama0530)

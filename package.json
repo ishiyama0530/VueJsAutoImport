@@ -2,10 +2,10 @@
   "name": "vue-autoimport",
   "displayName": "Vue.js AutoImport",
   "description": "provide for vue.js support.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "ishiyama",
   "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
-  "icon": "asset/vue.png",
+  "icon": "asset/icon.png",
   "homepage": "https://github.com/ishiyama0530/VueJsAutoImport",
   "engines": {
     "vscode": "^1.27.0"
