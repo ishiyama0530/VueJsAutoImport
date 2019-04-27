@@ -140,28 +140,54 @@ async function insertComponent(
       edit.insert(insertPosition, componentString)
     })
   } else {
+    const syntax = await vscode.window.showQuickPick([
+      { label: 'JavaScript', detail: 'use default script tag.', id: 'js' },
+      { label: 'TypeScript', detail: 'use lang="ts" script tag.', id: 'ts' },
+      {
+        label: 'TypeScript / class-style component syntax',
+        detail: 'use @Component decolater.',
+        id: 'tsclass'
+      }
+    ])
+
     // let's handle the case where components{} property is missing on the component
-    const match2 = /export[\s]*default[\s]*\{/.exec(text)
+    let match2: RegExpExecArray | null = null
+    if (syntax!.id === 'js') {
+      match2 = /export[\s]*default[\s]*\{/.exec(text)
+    } else if (syntax!.id === 'ts') {
+      match2 = /export[\s]*default.+\.extend[\s]*\(\{/.exec(text)
+    } else if (syntax!.id === 'tsclass') {
+      match2 = /\@Component/.exec(text)
+    }
+
     if (match2 && match2.index > -1) {
-      const insertIndex = match2.index + match2[0].length
+      let insertIndex = match2.index + match2[0].length
 
       const propIndent = indentBase.repeat(indentScriptTag ? 2 : 1)
+      const trailingComma = hasTrailingComma ? ',' : ''
       let componentString = ''
 
       if (hasNewLine) {
-        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${
-          hasTrailingComma ? ',' : ''
-        }${newLine}${propIndent}},`
+        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${trailingComma}${newLine}${propIndent}}${trailingComma}${newLine}`
       } else {
-        componentString = `${newLine}${propIndent}components: { ${componentName}${
-          hasTrailingComma ? ',' : ''
-        } },`
+        componentString = `${newLine}${propIndent}components: { ${componentName}${trailingComma} }${trailingComma}${newLine}`
       }
 
       const position = document.positionAt(insertIndex)
+
+      if (syntax!.id === 'tsclass') {
+        componentString = `@Component({${componentString}})`
+        await editor.edit(edit => {
+          const line = new vscode.Range(position.line, 0, position.line, 500)
+          edit.delete(line)
+        })
+      }
+
       await editor.edit(edit => {
         edit.insert(position, componentString)
       })
+    } else {
+      vscode.window.showWarningMessage('')
     }
   }
 }
