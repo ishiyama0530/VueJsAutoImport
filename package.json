@@ -26,6 +26,31 @@
           "type": "string",
           "default": "",
           "description": "root directory in workspace for file grep. ex) src"
+        },
+        "vuejsAutoImport.insertOneComponentPerLine": {
+          "type": "boolean",
+          "default": false,
+          "description": "Insert one component per line."
+        },
+        "vuejsAutoImport.indentScriptTag": {
+          "type": "boolean",
+          "default": false,
+          "description": "Script tag is indented (check this if imports are indented by one indentation level too little)"
+        },
+        "vuejsAutoImport.hasTrailingComma": {
+          "type": "boolean",
+          "default": false,
+          "description": "Add trailing comma behind the last inserted item."
+        },
+        "vuejsAutoImport.importWithSemicolon": {
+          "type": "boolean",
+          "default": false,
+          "description": "Put semicolon after imports"
+        },
+        "vuejsAutoImport.forcePascalCase": {
+          "type": "boolean",
+          "default": true,
+          "description": "Force components to use PascalCase (even if file name uses kebab-case, camelCase or snake_case)"
         }
       }
     },
