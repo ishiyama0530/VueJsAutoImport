@@ -145,10 +145,13 @@ async function insertComponent(
 
     if (match[0].trim().endsWith('{')) {
       // if no registed component (ex) components: {}
+
+      // this is needed in order to avoid pointless newlines 
       if (hasNewLine) {
-        componentString = `${newLine}${indent}${componentName}${
-          hasTrailingComma ? ',' : ''
-        }${newLine}`
+        componentString = `${newLine}${indent}${componentName}${hasTrailingComma ? ',' : ''}`
+        if (!endsWithEmptyNewline(match[0])) {
+          componentString += `${newLine}`
+        }
       } else {
         componentString = ` ${componentName}${hasTrailingComma ? ', ' : ''}`
       }
@@ -222,6 +225,10 @@ async function insertComponent(
       vscode.window.showWarningMessage('')
     }
   }
+}
+
+function endsWithEmptyNewline(string: string): boolean {
+  return new RegExp(/\n[^S\r\n]*$/).test(string);
 }
 
 function toPascalCase(string: string): string {
