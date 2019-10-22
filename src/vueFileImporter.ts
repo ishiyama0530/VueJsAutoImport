@@ -26,7 +26,9 @@ async function insertImport(
   const text = document.getText()
 
   const config = vscode.workspace.getConfiguration()
-  const importWithSemicolon = config.get<boolean>('vuejsAutoImport.importWithSemicolon')
+  const importWithSemicolon = config.get<boolean>(
+    'vuejsAutoImport.importWithSemicolon'
+  )
   const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
 
   // rookie-proofing for people who don't follow the convention and name their components
@@ -42,7 +44,9 @@ async function insertImport(
     await editor.edit(edit => {
       edit.insert(
         insertPosition,
-        `import ${fileName} from '${path}'${importWithSemicolon ? ';' : ''}${getEolString(document.eol)}`
+        `import ${fileName} from '${path}'${
+          importWithSemicolon ? ';' : ''
+        }${getEolString(document.eol)}`
       )
     })
   }
@@ -54,29 +58,34 @@ async function insertComponent(
 ): Promise<void> {
   const document = editor.document
   const text = document.getText()
-  
+
   const config = vscode.workspace.getConfiguration()
-  const hasNewLine = config.get<boolean>('vuejsAutoImport.insertOneComponentPerLine')
-  const hasTrailingComma = config.get<boolean>('vuejsAutoImport.hasTrailingComma')
+  const hasNewLine = config.get<boolean>(
+    'vuejsAutoImport.insertOneComponentPerLine'
+  )
+  const hasTrailingComma = config.get<boolean>(
+    'vuejsAutoImport.hasTrailingComma'
+  )
   const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
 
   const indentScriptTag = config.get<boolean>('vuejsAutoImport.indentScriptTag')
-  const indentBase = editor.options.insertSpaces ? ' '.repeat(editor.options.tabSize as number) : '\t'
+  const indentBase = editor.options.insertSpaces
+    ? ' '.repeat(editor.options.tabSize as number)
+    : '\t'
   const indent = indentBase.repeat(indentScriptTag ? 3 : 2)
 
   const newLine = getEolString(document.eol)
 
   const match = /components( )*:( )*{[\s\S]*?(?=})/.exec(text)
 
-    // rookie-proofing for people who don't follow the convention and name their components
+  // rookie-proofing for people who don't follow the convention and name their components
   // using snake_case or kebab-case
   if (forcePascalCase) {
     componentName = toPascalCase(componentName)
   }
 
   if (match && match.index > -1) {
-
-    // insertIndex — place in document where our line gets inserted 
+    // insertIndex — place in document where our line gets inserted
     // matchInsertIndex — place of insertIndex relative to the match
     let matchInsertIndex = match[0].length - 1
 
@@ -84,6 +93,8 @@ async function insertComponent(
     // in case someone accidentally removed a trailing comma at some point in time.
     // we would get wrong results. We could detect whether trailing comma is present
     // like we do later down the line, but that would waste even more resources
+
+    // prettier-ignore
     do {
       if (/[\S]/.test(match[0].charAt(matchInsertIndex))) {
         // if character is not a whitespace, we found the correct place to insert
@@ -92,7 +103,7 @@ async function insertComponent(
         break
       }
     } while (matchInsertIndex --> 0)
-  
+
     // we can't simply do `match.index + match[0].length`, because it screws up the 'one component per line' usecase
     const insertIndex = match.index + matchInsertIndex
     const insertPosition = document.positionAt(insertIndex)
@@ -100,12 +111,14 @@ async function insertComponent(
     // compute the string we're insterting
     let componentString = ''
 
-    if (match[0].trim().endsWith('{') ) {
+    if (match[0].trim().endsWith('{')) {
       // if no registed component (ex) components: {}
       if (hasNewLine) {
-        componentString = `${newLine}${indent}${componentName}${hasTrailingComma ? ',':''}${newLine}`
+        componentString = `${newLine}${indent}${componentName}${
+          hasTrailingComma ? ',' : ''
+        }${newLine}`
       } else {
-        componentString = ` ${componentName}${hasTrailingComma?', ':''}`
+        componentString = ` ${componentName}${hasTrailingComma ? ', ' : ''}`
       }
     } else {
       // Detect if there's a trailing comma. We only add  a comma if we don't detect
@@ -113,9 +126,13 @@ async function insertComponent(
       const trailingCommaPresent = match[0].trim().endsWith(',')
 
       if (hasNewLine) {
-        componentString = `${trailingCommaPresent?'':','}${newLine}${indent}${componentName}${hasTrailingComma ? ',':''}`
+        componentString = `${
+          trailingCommaPresent ? '' : ','
+        }${newLine}${indent}${componentName}${hasTrailingComma ? ',' : ''}`
       } else {
-        componentString = `${trailingCommaPresent?' ':', '}${componentName}${hasTrailingComma ? ',':''}`
+        componentString = `${
+          trailingCommaPresent ? ' ' : ', '
+        }${componentName}${hasTrailingComma ? ',' : ''}`
       }
     }
 
@@ -123,24 +140,54 @@ async function insertComponent(
       edit.insert(insertPosition, componentString)
     })
   } else {
+    const syntax = await vscode.window.showQuickPick([
+      { label: 'JavaScript', detail: 'use default script tag.', id: 'js' },
+      { label: 'TypeScript', detail: 'use lang="ts" script tag.', id: 'ts' },
+      {
+        label: 'TypeScript / class-style component syntax',
+        detail: 'use @Component decolater.',
+        id: 'tsclass'
+      }
+    ])
+
     // let's handle the case where components{} property is missing on the component
-    const match2 = /export[\s]*default[\s]*\{/.exec(text)
+    let match2: RegExpExecArray | null = null
+    if (syntax!.id === 'js') {
+      match2 = /export[\s]*default[\s]*\{/.exec(text)
+    } else if (syntax!.id === 'ts') {
+      match2 = /export[\s]*default.+\.extend[\s]*\(\{/.exec(text)
+    } else if (syntax!.id === 'tsclass') {
+      match2 = /\@Component/.exec(text)
+    }
+
     if (match2 && match2.index > -1) {
-      const insertIndex = match2.index + match2[0].length
+      let insertIndex = match2.index + match2[0].length
 
       const propIndent = indentBase.repeat(indentScriptTag ? 2 : 1)
+      const trailingComma = hasTrailingComma ? ',' : ''
       let componentString = ''
 
       if (hasNewLine) {
-        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${hasTrailingComma ? ',':''}${newLine}${propIndent}},`
+        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${trailingComma}${newLine}${propIndent}}${trailingComma}${newLine}`
       } else {
-        componentString = `${newLine}${propIndent}components: { ${componentName}${hasTrailingComma ? ',':''} },`
+        componentString = `${newLine}${propIndent}components: { ${componentName}${trailingComma} }${trailingComma}${newLine}`
       }
 
       const position = document.positionAt(insertIndex)
+
+      if (syntax!.id === 'tsclass') {
+        componentString = `@Component({${componentString}})`
+        await editor.edit(edit => {
+          const line = new vscode.Range(position.line, 0, position.line, 500)
+          edit.delete(line)
+        })
+      }
+
       await editor.edit(edit => {
         edit.insert(position, componentString)
       })
+    } else {
+      vscode.window.showWarningMessage('')
     }
   }
 }

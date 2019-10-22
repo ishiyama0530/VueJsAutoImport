@@ -2,10 +2,10 @@
   "name": "vue-autoimport",
   "displayName": "Vue.js AutoImport",
   "description": "provide for vue.js support.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "ishiyama",
   "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
-  "icon": "asset/vue.png",
+  "icon": "asset/icon.png",
   "homepage": "https://github.com/ishiyama0530/VueJsAutoImport",
   "engines": {
     "vscode": "^1.27.0"
@@ -83,12 +83,16 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "format": "prettier --write ./src/**/*.ts",
+    "precommit": "npm run format"
   },
   "devDependencies": {
     "@types/globby": "^8.0.0",
     "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.25",
+    "husky": "^2.1.0",
+    "prettier": "^1.17.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1",
     "vscode": "^1.1.21"
