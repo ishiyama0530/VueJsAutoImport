@@ -29,12 +29,41 @@ async function insertImport(
   const importWithSemicolon = config.get<boolean>(
     'vuejsAutoImport.importWithSemicolon'
   )
-  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
+  const hasFileExtension = !config.get<boolean>(
+    'vuejsAutoImport.hideFileExtension'
+  )
+  const forcePascalCase = config.get<boolean>(
+    'vuejsAutoImport.forcePascalCase'
+  )
 
   // rookie-proofing for people who don't follow the convention and name their components
   // using snake_case or kebab-case
   if (forcePascalCase) {
     fileName = toPascalCase(fileName)
+  }
+  // remove .vue extension if user doesn't want it
+  if (!hasFileExtension) {
+    // normally, a simple path.split('.vue')[0] should do it, but we're user-proofing it
+    // for people who don't follow conventions. path.split('.vue') would return incorrect
+    // results if someone had a component inside a folder with a name like this:
+    //
+    //         /src/components/example.vue/ActualComponent.vue
+    //
+    // path.split('.vue') would return: '/src/components/example'
+    //
+    // and that wouldn't be cool. Instead, we split the array with '.vue', remove the
+    // last element of the array (but only if it's an empty string, which it should be
+    // if user didn't mess something up). If the last array element is not an empty
+    // string, then user messed something up. No need for us to make an even bigger
+    // mess.
+    //
+    // Though to be fair, I absolutely agree that even this implementation is too 
+    // paranoid.
+    const tempArray = path.split('.vue')
+    if (tempArray[tempArray.length - 1] === '') {
+      tempArray.pop();
+    }
+    path = tempArray.join('.vue');
   }
 
   const match = /<script/.exec(text)
@@ -66,9 +95,12 @@ async function insertComponent(
   const hasTrailingComma = config.get<boolean>(
     'vuejsAutoImport.hasTrailingComma'
   )
-  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
-
-  const indentScriptTag = config.get<boolean>('vuejsAutoImport.indentScriptTag')
+  const forcePascalCase = config.get<boolean>(
+    'vuejsAutoImport.forcePascalCase'
+  )
+  const indentScriptTag = config.get<boolean>(
+    'vuejsAutoImport.indentScriptTag'
+  )
   const indentBase = editor.options.insertSpaces
     ? ' '.repeat(editor.options.tabSize as number)
     : '\t'

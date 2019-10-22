@@ -51,6 +51,11 @@
           "type": "boolean",
           "default": true,
           "description": "Force components to use PascalCase (even if file name uses kebab-case, camelCase or snake_case)"
+        },
+        "vuejsAutoImport.hideFileExtension": {
+          "type": "boolean",
+          "default": false,
+          "description": "When importing a component, do not add file extension to the import line."
         }
       }
     },
