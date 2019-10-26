@@ -52,18 +52,17 @@ async function insertImport(
     // path.split('.vue') would return: '/src/components/example'
     //
     // and that wouldn't be cool. Instead, we split the array with '.vue', remove the
-    // last element of the array (but only if it's an empty string, which it should be
-    // if user didn't mess something up). If the last array element is not an empty
-    // string, then user messed something up. No need for us to make an even bigger
-    // mess.
+    // last element of the array (which will be an empty string, because the code that
+    // gives us path is guaranteed to end with '.vue')
     //
-    // Though to be fair, I absolutely agree that even this implementation is too 
-    // paranoid.
-    const tempArray = path.split('.vue')
-    if (tempArray[tempArray.length - 1] === '') {
+    // But if we're doing path.split() and if our path is guaratneed to end with .vue,
+    // doing path.split('.') instead of path.split('.vue') is going to give us exactly
+    // the same result, but bthe code will look a bit nicer.
+    if (path) {
+      const tempArray = path.split('.')
       tempArray.pop();
+      path = tempArray.join('.');
     }
-    path = tempArray.join('.vue');
   }
 
   const match = /<script/.exec(text)
