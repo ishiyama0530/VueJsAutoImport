@@ -1,3 +1,17 @@
+# Vue.js AutoImport
+
+<p>
+  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
+    <img src="https://vsmarketplacebadge.apphb.com/version-short/ishiyama.vue-autoimport.svg?style=flat-square">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
+    <img src="https://vsmarketplacebadge.apphb.com/installs-short/ishiyama.vue-autoimport.svg?style=flat-square">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
+    <img src="https://vsmarketplacebadge.apphb.com/rating-short/ishiyama.vue-autoimport.svg?style=flat-square">
+  </a>
+</p>
+
 ## Features
 
 - insert import vue file path.
