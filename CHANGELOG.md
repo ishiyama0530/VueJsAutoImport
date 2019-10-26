@@ -2,6 +2,12 @@
 
 All notable changes to the "vuejs-autoimport" extension will be documented in this file.
 
+## 1.0.3
+
+- add option to remove .vue file extention from import path.
+- fix a minor bug.
+- resolved security alerts for github.com.
+
 ## 1.0.2 | 2019-4-27
 
 - add semicolon after imports (default: off)
