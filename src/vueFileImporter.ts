@@ -29,12 +29,40 @@ async function insertImport(
   const importWithSemicolon = config.get<boolean>(
     'vuejsAutoImport.importWithSemicolon'
   )
-  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
+  const hasFileExtension = !config.get<boolean>(
+    'vuejsAutoImport.hideFileExtension'
+  )
+  const forcePascalCase = config.get<boolean>(
+    'vuejsAutoImport.forcePascalCase'
+  )
 
   // rookie-proofing for people who don't follow the convention and name their components
   // using snake_case or kebab-case
   if (forcePascalCase) {
     fileName = toPascalCase(fileName)
+  }
+  // remove .vue extension if user doesn't want it
+  if (!hasFileExtension) {
+    // normally, a simple path.split('.vue')[0] should do it, but we're user-proofing it
+    // for people who don't follow conventions. path.split('.vue') would return incorrect
+    // results if someone had a component inside a folder with a name like this:
+    //
+    //         /src/components/example.vue/ActualComponent.vue
+    //
+    // path.split('.vue') would return: '/src/components/example'
+    //
+    // and that wouldn't be cool. Instead, we split the array with '.vue', remove the
+    // last element of the array (which will be an empty string, because the code that
+    // gives us path is guaranteed to end with '.vue')
+    //
+    // But if we're doing path.split() and if our path is guaratneed to end with .vue,
+    // doing path.split('.') instead of path.split('.vue') is going to give us exactly
+    // the same result, but bthe code will look a bit nicer.
+    if (path) {
+      const tempArray = path.split('.')
+      tempArray.pop();
+      path = tempArray.join('.');
+    }
   }
 
   const match = /<script/.exec(text)
@@ -66,9 +94,12 @@ async function insertComponent(
   const hasTrailingComma = config.get<boolean>(
     'vuejsAutoImport.hasTrailingComma'
   )
-  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
-
-  const indentScriptTag = config.get<boolean>('vuejsAutoImport.indentScriptTag')
+  const forcePascalCase = config.get<boolean>(
+    'vuejsAutoImport.forcePascalCase'
+  )
+  const indentScriptTag = config.get<boolean>(
+    'vuejsAutoImport.indentScriptTag'
+  )
   const indentBase = editor.options.insertSpaces
     ? ' '.repeat(editor.options.tabSize as number)
     : '\t'
@@ -113,10 +144,13 @@ async function insertComponent(
 
     if (match[0].trim().endsWith('{')) {
       // if no registed component (ex) components: {}
+
+      // this is needed in order to avoid pointless newlines 
       if (hasNewLine) {
-        componentString = `${newLine}${indent}${componentName}${
-          hasTrailingComma ? ',' : ''
-        }${newLine}`
+        componentString = `${newLine}${indent}${componentName}${hasTrailingComma ? ',' : ''}`
+        if (!endsWithEmptyNewline(match[0])) {
+          componentString += `${newLine}`
+        }
       } else {
         componentString = ` ${componentName}${hasTrailingComma ? ', ' : ''}`
       }
@@ -190,6 +224,10 @@ async function insertComponent(
       vscode.window.showWarningMessage('')
     }
   }
+}
+
+function endsWithEmptyNewline(string: string): boolean {
+  return new RegExp(/\n[^S\r\n]*$/).test(string);
 }
 
 function toPascalCase(string: string): string {
