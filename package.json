@@ -2,7 +2,7 @@
   "name": "vue-autoimport",
   "displayName": "Vue.js AutoImport",
   "description": "provide for vue.js support.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "publisher": "ishiyama",
   "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
@@ -63,13 +63,13 @@
     "commands": [
       {
         "command": "extension.vuejsAutoImport",
-        "title": "Import .vue"
+        "title": "Import vue file"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorTextFocus",
+          "when": "resourceLangId == vue",
           "command": "extension.vuejsAutoImport",
           "group": "navigation@1"
         }
@@ -78,8 +78,8 @@
     "keybindings": [
       {
         "command": "extension.vuejsAutoImport",
-        "key": "ctrl+/",
-        "mac": "cmd+/",
+        "key": "ctrl+i",
+        "mac": "cmd+i",
         "when": "editorTextFocus"
       }
     ]
