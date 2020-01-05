@@ -19,9 +19,8 @@
 
 ## Usages
 
-~~Press "ctrl + /" or select "import .vue" in context menu on custom component tag.~~
+~~Press "ctrl + /" or select "import .vue" in context menu on custom component tag.~~  
 Press 'ctrl + i' or select context menus 'Import vue file' on custom component tag.  
-(Update 2020-01-05)
 
 ![demo](https://raw.githubusercontent.com/wiki/ishiyama0530/VueJsAutoImport/gif/1.gif)
 
