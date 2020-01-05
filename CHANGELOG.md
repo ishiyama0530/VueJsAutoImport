@@ -2,6 +2,11 @@
 
 All notable changes to the "vuejs-autoimport" extension will be documented in this file.
 
+## 1.0.4 | 2020-01-05
+- update command title.
+- change keybindings 'cmd + /' to 'cmd + i'.
+- fix to show context menu when only vue file.
+
 ## 1.0.3 | 2019-10-27
 
 - add option to remove .vue file extention from import path.
