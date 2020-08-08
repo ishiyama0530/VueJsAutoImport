@@ -17,16 +17,5 @@
 	"exclude": [
 		"node_modules",
 		".vscode-test"
-	],
-	"husky": {
-		"hooks": {
-			"pre-commit": "tsc --noEmit && lint-staged"
-		}
-	},
-	"lint-staged": {
-		"*.{js,ts}": [
-			"eslint --fix",
-			"git add"
-		]
-	}
+	]
 }
