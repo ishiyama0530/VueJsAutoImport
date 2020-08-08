@@ -1,111 +1,50 @@
 {
-  "name": "vue-autoimport",
-  "displayName": "Vue.js AutoImport",
-  "description": "provide for vue.js support.",
-  "version": "1.0.4",
-  "license": "MIT",
-  "publisher": "ishiyama",
-  "repository": "https://github.com/ishiyama0530/VueJsAutoImport",
-  "icon": "asset/icon.png",
-  "homepage": "https://github.com/ishiyama0530/VueJsAutoImport",
-  "engines": {
-    "vscode": "^1.27.0"
-  },
-  "categories": [
-    "Programming Languages"
-  ],
-  "activationEvents": [
-    "onLanguage:vue"
-  ],
-  "main": "./out/extension",
-  "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Vue.js AutoImport",
-      "properties": {
-        "vuejsAutoImport.rootDirectory": {
-          "type": "string",
-          "default": "",
-          "description": "root directory in workspace for file grep. ex) src"
-        },
-        "vuejsAutoImport.insertOneComponentPerLine": {
-          "type": "boolean",
-          "default": false,
-          "description": "Insert one component per line."
-        },
-        "vuejsAutoImport.indentScriptTag": {
-          "type": "boolean",
-          "default": false,
-          "description": "Script tag is indented (check this if imports are indented by one indentation level too little)"
-        },
-        "vuejsAutoImport.hasTrailingComma": {
-          "type": "boolean",
-          "default": false,
-          "description": "Add trailing comma behind the last inserted item."
-        },
-        "vuejsAutoImport.importWithSemicolon": {
-          "type": "boolean",
-          "default": false,
-          "description": "Put semicolon after imports"
-        },
-        "vuejsAutoImport.forcePascalCase": {
-          "type": "boolean",
-          "default": true,
-          "description": "Force components to use PascalCase (even if file name uses kebab-case, camelCase or snake_case)"
-        },
-        "vuejsAutoImport.hideFileExtension": {
-          "type": "boolean",
-          "default": false,
-          "description": "When importing a component, do not add file extension to the import line."
-        }
-      }
-    },
-    "commands": [
-      {
-        "command": "extension.vuejsAutoImport",
-        "title": "Import vue file"
-      }
-    ],
-    "menus": {
-      "editor/context": [
-        {
-          "when": "resourceLangId == vue",
-          "command": "extension.vuejsAutoImport",
-          "group": "navigation@1"
-        }
-      ]
-    },
-    "keybindings": [
-      {
-        "command": "extension.vuejsAutoImport",
-        "key": "ctrl+i",
-        "mac": "cmd+i",
-        "when": "editorTextFocus"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test",
-    "format": "prettier --write ./src/**/*.ts",
-    "precommit": "npm run format"
-  },
-  "devDependencies": {
-    "@types/globby": "^8.0.0",
-    "@types/mocha": "^2.2.42",
-    "@types/node": "^8.10.25",
-    "husky": "^2.1.0",
-    "prettier": "^1.17.0",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.21"
-  },
-  "dependencies": {
-    "@types/voca": "^1.4.0",
-    "globby": "^8.0.1",
-    "voca": "^1.4.0"
-  }
+	"name": "vue-autoimport",
+	"displayName": "vue-autoimport",
+	"description": "Provide of auto import feature for component.",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.47.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:vue-autoimport.helloWorld"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "vue-autoimport.helloWorld",
+				"title": "Hello World"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"test": "jest"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/jest": "^26.0.9",
+		"@types/node": "^13.11.0",
+		"@types/vscode": "^1.47.0",
+		"@typescript-eslint/eslint-plugin": "^2.34.0",
+		"@typescript-eslint/parser": "^2.34.0",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.11.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"glob": "^7.1.6",
+		"husky": "^4.2.5",
+		"jest": "^26.2.2",
+		"lint-staged": "^10.2.11",
+		"prettier": "^2.0.5",
+		"ts-jest": "^26.1.4",
+		"typescript": "^3.9.7"
+	}
 }

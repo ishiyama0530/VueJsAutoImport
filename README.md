@@ -1,41 +1,65 @@
-# Vue.js AutoImport
+# vue-autoimport README
 
-<p>
-  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
-    <img src="https://vsmarketplacebadge.apphb.com/version-short/ishiyama.vue-autoimport.svg?style=flat-square">
-  </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
-    <img src="https://vsmarketplacebadge.apphb.com/installs-short/ishiyama.vue-autoimport.svg?style=flat-square">
-  </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport">
-    <img src="https://vsmarketplacebadge.apphb.com/rating-short/ishiyama.vue-autoimport.svg?style=flat-square">
-  </a>
-</p>
+This is the README for your extension "vue-autoimport". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
-- insert import vue file path.
-- register imported file in components.
+Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
-## Usages
+For example if there is an image subfolder under your extension project workspace:
 
-~~Press "ctrl + /" or select "import .vue" in context menu on custom component tag.~~  
-Press 'ctrl + i' or select context menus 'Import vue file' on custom component tag.  
+\!\[feature X\]\(images/feature-x.png\)
 
-![demo](https://raw.githubusercontent.com/wiki/ishiyama0530/VueJsAutoImport/gif/1.gif)
+> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Change Log
+## Requirements
 
-See Change Log [here](https://github.com/ishiyama0530/VueJsAutoImport/blob/master/CHANGELOG.md)
+If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
-## Marketplace
+## Extension Settings
 
-See Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport)
+Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-## Contributor
+For example:
 
-- [xternal7](https://github.com/xternal7)
+This extension contributes the following settings:
 
-## License
+* `myExtension.enable`: enable/disable this extension
+* `myExtension.thing`: set to `blah` to do something
 
-MIT © [ishiyama](https://github.com/ishiyama0530)
+## Known Issues
+
+Calling out known issues can help limit users opening duplicate issues against your extension.
+
+## Release Notes
+
+Users appreciate release notes as you update your extension.
+
+### 1.0.0
+
+Initial release of ...
+
+### 1.0.1
+
+Fixed issue #.
+
+### 1.1.0
+
+Added features X, Y, and Z.
+
+-----------------------------------------------------------------------------------------------------------
+
+## Working with Markdown
+
+**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+
+* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
+* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
+* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
+
+### For more information
+
+* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
+* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+
+**Enjoy!**
