@@ -1,30 +1,87 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+'use strict'
+
 import * as vscode from 'vscode'
+import * as voca from 'voca'
+import * as path from 'path'
+import { importVueFile } from './vueFileImporter'
+import { grepAsync } from './lib/grep'
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "vue-autoimport" is now active!')
+  context.subscriptions.push(
+    vscode.commands.registerCommand('extension.vuejsAutoImport', async () => {
+      const text: string = getText(
+        vscode.window.activeTextEditor!.document,
+        vscode.window.activeTextEditor!.selection.active,
+      )
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  const disposable = vscode.commands.registerCommand(
-    'vue-autoimport.helloWorld',
-    () => {
-      // The code you place here will be executed every time your command is executed
+      if (
+        !vscode.window.activeTextEditor ||
+        vscode.window.activeTextEditor.document.languageId !== 'vue'
+      ) {
+        vscode.window.showWarningMessage('Vue.js AutoImport is only vue file.')
+        return false
+      }
 
-      // Display a message box to the user
-      vscode.window.showInformationMessage('Hello World from vue-autoimport!')
-    },
+      const rootPath = vscode.workspace.rootPath
+        ? path.resolve(
+            vscode.workspace.rootPath,
+            vscode.workspace
+              .getConfiguration()
+              .get<string>('vuejsAutoImport.rootDirectory')!,
+          )
+        : ''
+
+      const pathList: string[] = await grepAsync([
+        path.join(rootPath, `**/${voca.camelCase(text)}.vue`),
+        path.join(rootPath, `**/${voca.kebabCase(text)}.vue`),
+        path.join(rootPath, `**/${voca.capitalize(text)}.vue`),
+      ])
+
+      const importCore = (fullPath: string) => {
+        const activeEditorPath = path.parse(
+          vscode.window.activeTextEditor!.document.fileName,
+        )
+        const parsedTargetFilePath = path.parse(fullPath)
+        const relationalDir = path.relative(
+          activeEditorPath.dir,
+          parsedTargetFilePath.dir,
+        )
+        let relationalPath = path
+          .join(relationalDir, parsedTargetFilePath.base)
+          .replace(/\\/g, '/')
+
+        // if just under
+        if (!relationalPath.startsWith('../')) {
+          relationalPath = './' + relationalPath
+        }
+
+        importVueFile(parsedTargetFilePath.name, relationalPath)
+      }
+
+      if (pathList.length === 1) {
+        importCore(pathList[0])
+      } else if (pathList.length > 1) {
+        vscode.window.showQuickPick(pathList).then((selectedPath) => {
+          importCore(selectedPath!)
+        })
+      }
+    }),
   )
-
-  context.subscriptions.push(disposable)
 }
 
-// this method is called when your extension is deactivated
-// export function deactivate() {}
+function getText(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): string {
+  const targetRange = document.getWordRangeAtPosition(
+    position,
+    /<.+?-?.+?(>| |\n|\r\n|$)/,
+  )
+  const targetText = document.getText(targetRange)
+  const formatedText = targetText
+    .replace('<', '')
+    .replace('>', '')
+    .replace('/', '')
+    .trim()
+  return formatedText
+}
