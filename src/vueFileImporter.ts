@@ -32,9 +32,7 @@ async function insertImport(
   const hasFileExtension = !config.get<boolean>(
     'vuejsAutoImport.hideFileExtension'
   )
-  const forcePascalCase = config.get<boolean>(
-    'vuejsAutoImport.forcePascalCase'
-  )
+  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
 
   // rookie-proofing for people who don't follow the convention and name their components
   // using snake_case or kebab-case
@@ -60,8 +58,8 @@ async function insertImport(
     // the same result, but bthe code will look a bit nicer.
     if (path) {
       const tempArray = path.split('.')
-      tempArray.pop();
-      path = tempArray.join('.');
+      tempArray.pop()
+      path = tempArray.join('.')
     }
   }
 
@@ -69,10 +67,17 @@ async function insertImport(
   if (match && match.index > -1) {
     const scriptTagPosition = document.positionAt(match.index)
     const insertPosition = new vscode.Position(scriptTagPosition.line + 1, 0)
+    const indentScriptTag = config.get<boolean>(
+      'vuejsAutoImport.indentScriptTag'
+    )
+    const indentBase = editor.options.insertSpaces
+      ? ' '.repeat(editor.options.tabSize as number)
+      : '\t'
+
     await editor.edit(edit => {
       edit.insert(
         insertPosition,
-        `import ${fileName} from '${path}'${
+        `${indentScriptTag ? indentBase : ''}import ${fileName} from '${path}'${
           importWithSemicolon ? ';' : ''
         }${getEolString(document.eol)}`
       )
@@ -94,12 +99,8 @@ async function insertComponent(
   const hasTrailingComma = config.get<boolean>(
     'vuejsAutoImport.hasTrailingComma'
   )
-  const forcePascalCase = config.get<boolean>(
-    'vuejsAutoImport.forcePascalCase'
-  )
-  const indentScriptTag = config.get<boolean>(
-    'vuejsAutoImport.indentScriptTag'
-  )
+  const forcePascalCase = config.get<boolean>('vuejsAutoImport.forcePascalCase')
+  const indentScriptTag = config.get<boolean>('vuejsAutoImport.indentScriptTag')
   const indentBase = editor.options.insertSpaces
     ? ' '.repeat(editor.options.tabSize as number)
     : '\t'
@@ -145,9 +146,11 @@ async function insertComponent(
     if (match[0].trim().endsWith('{')) {
       // if no registed component (ex) components: {}
 
-      // this is needed in order to avoid pointless newlines 
+      // this is needed in order to avoid pointless newlines
       if (hasNewLine) {
-        componentString = `${newLine}${indent}${componentName}${hasTrailingComma ? ',' : ''}`
+        componentString = `${newLine}${indent}${componentName}${
+          hasTrailingComma ? ',' : ''
+        }`
         if (!endsWithEmptyNewline(match[0])) {
           componentString += `${newLine}`
         }
@@ -189,7 +192,9 @@ async function insertComponent(
     if (syntax!.id === 'js') {
       match2 = /export[\s]*default[\s]*\{/.exec(text)
     } else if (syntax!.id === 'ts') {
-      match2 = /export[\s]*default.+\.extend[\s]*\(\{/.exec(text)
+      match2 = /(export[\s]*default.+\.extend[\s]*\(\{)|(export[\s]*default[\s]*defineComponent\(\{)/.exec(
+        text
+      )
     } else if (syntax!.id === 'tsclass') {
       match2 = /\@Component/.exec(text)
     }
@@ -197,14 +202,29 @@ async function insertComponent(
     if (match2 && match2.index > -1) {
       let insertIndex = match2.index + match2[0].length
 
+      let commaOverride = ','
+      let compBlockEol = ''
+      if (text.charAt(insertIndex) === '}') {
+        compBlockEol = `${getEolString(document.eol)}${
+          indentScriptTag ? indentBase : ''
+        }`
+        commaOverride = ''
+      } else {
+        let i = insertIndex
+        while (/\s/.test(text.charAt(i++))) {}
+        if (text.charAt(i - 1) === '}') commaOverride = ''
+      }
+
       const propIndent = indentBase.repeat(indentScriptTag ? 2 : 1)
       const trailingComma = hasTrailingComma ? ',' : ''
       let componentString = ''
 
       if (hasNewLine) {
-        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${trailingComma}${newLine}${propIndent}}${trailingComma}${newLine}`
+        componentString = `${newLine}${propIndent}components: {${newLine}${indent}${componentName}${trailingComma}${newLine}${propIndent}}${trailingComma ||
+          commaOverride}${compBlockEol}`
       } else {
-        componentString = `${newLine}${propIndent}components: { ${componentName}${trailingComma} }${trailingComma}${newLine}`
+        componentString = `${newLine}${propIndent}components: { ${componentName}${trailingComma} }${trailingComma ||
+          commaOverride}${compBlockEol}`
       }
 
       const position = document.positionAt(insertIndex)
@@ -227,7 +247,7 @@ async function insertComponent(
 }
 
 function endsWithEmptyNewline(string: string): boolean {
-  return new RegExp(/\n[^S\r\n]*$/).test(string);
+  return new RegExp(/\n[^S\r\n]*$/).test(string)
 }
 
 function toPascalCase(string: string): string {
