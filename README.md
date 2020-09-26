@@ -19,7 +19,6 @@
 
 ## Usages
 
-~~Press "ctrl + /" or select "import .vue" in context menu on custom component tag.~~  
 Press 'ctrl + i' or select context menus 'Import vue file' on custom component tag.  
 
 ![demo](https://raw.githubusercontent.com/wiki/ishiyama0530/VueJsAutoImport/gif/1.gif)
@@ -31,10 +30,6 @@ See Change Log [here](https://github.com/ishiyama0530/VueJsAutoImport/blob/maste
 ## Marketplace
 
 See Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ishiyama.vue-autoimport)
-
-## Contributor
-
-- [xternal7](https://github.com/xternal7)
 
 ## License
 

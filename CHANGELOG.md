@@ -2,6 +2,14 @@
 
 All notable changes to the "vuejs-autoimport" extension will be documented in this file.
 
+## 1.0.5 | 2020-09-26
+Various bug fixes + Vue 3 TypeScript support
+- added support for the Vue 3 TypeScript syntax using defineComponent()
+- fixed: extension doesn't indent the import statement even with the Indent Script Tag option enabled
+- fixed: leaves empty new line after the components object with Insert One Component Per Line enabled
+- fixed: doesn't add comma after the components object when Has Trailing Comma is disabled
+    - now it adds comma when there are other properties in the component's object (e.g. computed, methods,...)
+
 ## 1.0.4 | 2020-01-05
 - update command title.
 - change keybindings 'cmd + /' to 'cmd + i'.
