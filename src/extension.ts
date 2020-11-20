@@ -34,7 +34,8 @@ export function activate(context: vscode.ExtensionContext) {
       const pathList: string[] = await grepAsync([
         path.join(rootPath, `**/${voca.camelCase(text)}.vue`),
         path.join(rootPath, `**/${voca.kebabCase(text)}.vue`),
-        path.join(rootPath, `**/${voca.capitalize(text)}.vue`)
+        path.join(rootPath, `**/${voca.capitalize(text)}.vue`),
+        path.join(rootPath, `**/${voca.snakeCase(text)}.vue`)
       ])
 
       const importCore = (fullPath: string) => {
